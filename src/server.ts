@@ -1,27 +1,15 @@
 import express, { json, Express, Request, Response } from "express";
 import prisma from "../utils/db";
+import cors from "cors";
+import { CreateUser } from "./controllers/User";
 
 const app: Express = express();
+app.use(cors());
 const Port = 5000;
+
 app.use(json());
 
-app.post("/createuser", async (req: Request, res: Response) => {
-  if (req.body == "") {
-    return res.send("please fill the data");
-  }
-
-  try {
-    const user = await prisma.client.create({
-      data: {
-        ...req.body,
-      },
-    });
-
-    return res.send(user);
-  } catch (error) {
-    return res.send(error);
-  }
-});
+app.post("/createuser", CreateUser);
 
 app.get("/", (req, res) => {
   res.send("welcome to my server ✅👋");
